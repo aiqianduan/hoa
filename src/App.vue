@@ -1,32 +1,62 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+    <div id="app">
+        <!-- headbar component -->
+        <Headbar class="headbar"></Headbar>
+        <router-view class="page"></router-view>
+        <!-- tabbar component -->
+        <Tabbar class="tabbar"></Tabbar>
     </div>
-    <router-view/>
-  </div>
 </template>
+
+<script>
+import Headbar from '@/components/Headbar.vue'
+import Tabbar from '@/components/Tabbar.vue'
+export default {
+    components: {
+        Headbar,
+        Tabbar
+    }
+}
+</script>
 
 <style>
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+    overflow-y: hidden;
 }
 
-#nav {
-  padding: 30px;
+.headbar {
+    position: fixed;
+    width: 100vw;
+    height: 60px;
+    z-index: 99;
+    background-color: white;
+    top: 0;
+    left: 0;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.page {
+    position: absolute;
+    top: 60px;
+    bottom: 60px;
+    left: 0;
+    overflow: auto;
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.tabbar {
+    left: 0;
+    width: 100vw;
+    height: 60px;
+    bottom: 0;
+    position: fixed;
+    z-index: 99;
+}
+
+html,body {
+    margin: 0;
+    padding: 0;
+    /* box-sizing: border-box; */
 }
 </style>
