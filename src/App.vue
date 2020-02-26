@@ -3,18 +3,21 @@
         <!-- headbar component -->
         <Headbar class="headbar"></Headbar>
         <router-view class="page"></router-view>
+        <PlayTabbar class="tabbar"></PlayTabbar>
         <!-- tabbar component -->
-        <Tabbar class="tabbar"></Tabbar>
+        <!-- <Tabbar class="tabbar"></Tabbar> -->
     </div>
 </template>
 
 <script>
 import Headbar from '@/components/Headbar.vue'
-import Tabbar from '@/components/Tabbar.vue'
+import PlayTabbar from '@/components/PlayTabbar.vue'
+// import Tabbar from '@/components/Tabbar.vue'
 export default {
     components: {
         Headbar,
-        Tabbar
+        PlayTabbar
+        // Tabbar
     }
 }
 </script>
@@ -30,7 +33,7 @@ export default {
 .headbar {
     position: fixed;
     width: 100vw;
-    height: 60px;
+    height: 10vh;
     z-index: 99;
     background-color: white;
     top: 0;
@@ -39,7 +42,7 @@ export default {
 
 .page {
     position: absolute;
-    top: 60px;
+    top: 80px;
     bottom: 60px;
     left: 0;
     overflow: auto;
@@ -57,6 +60,6 @@ export default {
 html,body {
     margin: 0;
     padding: 0;
-    /* box-sizing: border-box; */
+    box-sizing: border-box;
 }
 </style>

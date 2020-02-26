@@ -10,6 +10,24 @@ import '@/assets/icons/iconfont.css'
 import axios from 'axios'
 import vueAxios from 'vue-axios'
 
+// 引入aos
+import 'aos/dist/aos.css'
+import Aos from 'aos/dist/aos.js'
+
+// 引入animate.css
+// import animate from 'animate.css/animate.min.css'
+
+// 引入vue-lazyload
+import VueLazyLoad from 'vue-lazyload'
+Vue.use(VueLazyLoad, {
+    attempt: 4,
+    loading: require('./assets/loading.gif')
+})
+
+// aos初始化
+Aos.init()
+
+// Vue.use
 Vue.use(vueAxios, axios)
 
 Vue.config.productionTip = false
