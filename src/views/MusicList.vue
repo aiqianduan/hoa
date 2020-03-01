@@ -1,9 +1,7 @@
 <template>
     <div class="page">
         <template v-for="music in musicList">
-            <router-link :to="'/music/play/'+music.id" :key="music.id">
-                <img v-lazy="music.al.picUrl">
-            </router-link>
+            <img v-lazy="music.al.picUrl" :key="music.id" @click="add(music.id)">
         </template>
     </div>
 </template>
@@ -19,7 +17,7 @@ export default {
     async mounted () {
         const musicListId = this.$route.params.id
         // 查询歌单详情
-        const data = await this.axios.get(`/netease/songList?id=${musicListId}`)
+        const data = await this.axios.get(`/netease/songList?id=${musicListId}`).catch(err => err)
         if (data.status === 200) {
             this.musicIds = data.data.data.tracks.map(item => item.id)
             // 查询歌单单独歌曲信息
@@ -28,19 +26,16 @@ export default {
                 this.musicList = musicData.data.data.songs
             }
         }
+    },
+    methods: {
+        add (id) {
+            this.$store.commit('pushIds', id)
+        }
     }
 }
 </script>
 
 <style scoped>
-/* .page {
-    position: relative;
-    width: 100vw;
-    height: 80vh;
-    overflow: auto;
-    top: 60px;
-} */
-
 .page img {
     width: 42vw;
     margin: 4vw;

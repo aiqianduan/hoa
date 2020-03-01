@@ -1,17 +1,26 @@
 <template>
     <div>
+        <!-- 轮播图 -->
+        <div class="swiper-container">
+            <!-- Additional required wrapper -->
+            <div class="swiper-wrapper">
+                <div class="swiper-slide" v-for="(imgUrl,index) in swiperImgs" :key="index">
+                    <img :src="imgUrl.picUrl">
+                </div>
+            </div>
+            <!-- Add Pagination -->
+            <div class="swiper-pagination"></div>
+        </div>
         <div class="recommend">
             <span>歌单推荐</span>
             <span>more>></span>
         </div>
         <!-- 歌单列表 -->
         <div class="musicList">
-            <template v-for="(info, index) in infos">
+            <template v-for="info in infos">
                 <div class="info-div" :key="info.id">
                     <router-link :to="'/musicList/'+info.id">
-                        <img data-aos-duration="3000" data-aos-easing="linear"
-                            :data-aos="index % 3 == 0 ? 'fade-right' : index % 3 === 1 ? 'zoom-in' : 'fade-left'"
-                            class="cover-img-url" v-lazy="info.coverImgUrl">
+                        <img class="cover-img-url" v-lazy="info.coverImgUrl">
                     </router-link>
                     <span class="cover-name" v-text="info.name"></span>
                 </div>
@@ -22,28 +31,47 @@
 </template>
 
 <script>
+// 引入swiper
+import 'swiper/css/swiper.min.css'
+import Swiper from 'swiper'
 export default {
     data () {
         return {
-            infos: []
+            infos: [],
+            swiperImgs: []
         }
     },
-    async mounted () {
+    async created () {
         // 请求数据
-        const data = await this.axios.get('/netease/songList/hot?pageSize=6&page=5')
-        if (data.status === 200) {
-            this.infos = data.data.data
-        }
-    },
-    computed: {
-        storeIds () {
-            return this.$store.state.ids
-        }
-    },
-    watch: {
-        storeIds: newVal => {
-            console.log(newVal)
-        }
+        const { param1: infos, param2: swiperImgs } = await this.axios.all([
+            // 请求热门歌单资源
+            this.axios.get('/netease/songList/hot?pageSize=6&page=4'),
+            // 请求轮播图资源
+            this.axios.get('/netease/banner')])
+            .then(this.axios.spread((param1, param2) => {
+                param1 = param1.data.data
+                param2 = param2.data.data
+                return { param1, param2 }
+            }))
+            .catch(err => err)
+        this.infos = infos
+        this.swiperImgs = swiperImgs
+        // * 必须dom加载完毕再执行
+        this.$nextTick(() => {
+            // eslint-disable-next-line no-new
+            new Swiper('.swiper-container', {
+                loop: true,
+                speed: 2000,
+                spaceBetween: 20,
+                autoplay: {
+                    delay: 5000
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    dynamicBullets: true
+                }
+            })
+        })
     }
 }
 </script>
@@ -60,7 +88,6 @@ export default {
     justify-content: space-between;
 }
 .musicList {
-    margin: 10px;
     display: flex;
     /* height: 280px; */
     overflow: hidden;
@@ -79,7 +106,6 @@ export default {
     letter-spacing: .1em;
     color: #576574;
     position: relative;
-    font-weight: bold;
     font-size: 10px;
 }
 
@@ -88,11 +114,20 @@ export default {
     flex-direction: column;
     position: relative;
     width: 30%;
-    margin: 10px 3px 0 3px;
+    margin: 10px 5px 0 5px;
+}
+
+.swiper-container {
+    width: 94vw;
+}
+
+.swiper-slide img {
+    width: 100%;
+    border-radius: 5px;
 }
 
 /* 滚动条样式(不显示) */
 .musicList::-webkit-scrollbar {
-  width: 0;
+    width: 0;
 }
 </style>

@@ -10,6 +10,7 @@ module.exports = {
                 target: 'http://v1.itooi.cn',
                 changeOrigin: true,
                 secure: false,
+                ws: true,
                 pathRewrite: {
                     '^/netease': '/netease'
                 }
